@@ -28,3 +28,4 @@ security import "$TMP/id.p12" -k "$KEYCHAIN" -P "$PASSWORD" \
     -T /usr/bin/codesign -T /usr/bin/security >/dev/null
 
 echo "Created local signing identity: $NAME"
+echo "The first codesign run will ask for your login keychain password once. Choose Always Allow."

@@ -102,7 +102,9 @@ The build script signs the bundle ad-hoc by default. Ad-hoc signatures change on
 ./scripts/dev-cert.sh
 ```
 
-The build script picks it up automatically and the permissions survive rebuilds. Set `CODESIGN_IDENTITY` to use a Developer ID for distribution:
+The build script picks it up automatically and the permissions survive rebuilds. macOS asks for your login keychain password **once** the first time `codesign` uses the key — choose **Always Allow** so later builds sign without a prompt. The certificate is local to this Mac and is not used for distribution.
+
+Set `CODESIGN_IDENTITY` to use a Developer ID for distribution:
 
 ```bash
 CODESIGN_IDENTITY="Developer ID Application: …" ./scripts/build-app.sh
