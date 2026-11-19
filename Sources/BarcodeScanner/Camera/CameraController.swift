@@ -33,6 +33,7 @@ final class CameraController: NSObject {
     private var desiredRunning = false
     private var visionRequest: VNDetectBarcodesRequest?
     private var retryCount = 0
+    private var loggedFirstFrame = false
 
     override init() {
         super.init()
@@ -357,6 +358,10 @@ extension CameraController: AVCaptureVideoDataOutputSampleBufferDelegate {
         from connection: AVCaptureConnection
     ) {
         guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
+        if !loggedFirstFrame {
+            loggedFirstFrame = true
+            logger.notice("First frame \(CVPixelBufferGetWidth(pixelBuffer), privacy: .public)x\(CVPixelBufferGetHeight(pixelBuffer), privacy: .public)")
+        }
 
         let request = visionRequest ?? makeVisionRequest()
         visionRequest = request

@@ -58,7 +58,7 @@ final class ScanOutput {
     private func postPaste(pressEnter: Bool) {
         postKey(CGKeyCode(kVK_ANSI_V), flags: .maskCommand)
         guard pressEnter else { return }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.06) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.10) {
             self.postKey(CGKeyCode(kVK_Return), flags: [])
         }
     }

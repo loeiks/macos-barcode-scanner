@@ -59,7 +59,7 @@ final class ScannerAppModel: ObservableObject {
     }
 
     func start() {
-        logger.notice("Starting app, camera authorization: \(AVCaptureDevice.authorizationStatus(for: .video).rawValue, privacy: .public)")
+        logger.notice("Starting app, camera: \(AVCaptureDevice.authorizationStatus(for: .video).rawValue, privacy: .public), accessibility: \(AccessibilityPermission.isGranted, privacy: .public)")
         output.lastExternalApplication = { [weak self] in self?.lastExternalApplication }
         lastExternalApplication = NSWorkspace.shared.frontmostApplication.flatMap {
             $0.bundleIdentifier == Bundle.main.bundleIdentifier ? nil : $0
