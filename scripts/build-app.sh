@@ -17,7 +17,11 @@ if [ -f Resources/AppIcon.icns ]; then
     cp Resources/AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"
 fi
 
-IDENTITY="${CODESIGN_IDENTITY:--}"
+IDENTITY="${CODESIGN_IDENTITY:-}"
+if [ -z "$IDENTITY" ] && security find-identity -p codesigning 2>/dev/null | grep -q '"Barcode Scanner Dev"'; then
+    IDENTITY="Barcode Scanner Dev"
+fi
+IDENTITY="${IDENTITY:--}"
 codesign --force --sign "$IDENTITY" --identifier "com.exweiv.barcodescanner" "$APP"
 
 echo "Built: $APP"

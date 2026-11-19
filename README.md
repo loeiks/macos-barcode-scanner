@@ -96,13 +96,17 @@ Lists cameras and their formats. Add `--capture` to start the camera for a few s
 
 ### Signing
 
-The build script signs the bundle ad-hoc by default. Set `CODESIGN_IDENTITY` to use a Developer ID or a local certificate:
+The build script signs the bundle ad-hoc by default. Ad-hoc signatures change on every rebuild, which makes macOS forget camera and Accessibility grants. For development, create a local self-signed identity once:
+
+```bash
+./scripts/dev-cert.sh
+```
+
+The build script picks it up automatically and the permissions survive rebuilds. Set `CODESIGN_IDENTITY` to use a Developer ID for distribution:
 
 ```bash
 CODESIGN_IDENTITY="Developer ID Application: …" ./scripts/build-app.sh
 ```
-
-After replacing an ad-hoc signed build, macOS can forget the camera and Accessibility grants. Re-grant them if paste stops working.
 
 ## Notes
 
