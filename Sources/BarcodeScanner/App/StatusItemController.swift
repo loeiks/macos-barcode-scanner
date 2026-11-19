@@ -7,6 +7,7 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
     private let popover = NSPopover()
     private let model: ScannerAppModel
     private var cancellables = Set<AnyCancellable>()
+    private var lastClose = Date.distantPast
 
     init(model: ScannerAppModel) {
         self.model = model
@@ -47,6 +48,10 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
             return
         }
 
+        // A transient popover closes on the same click that lands on the status
+        // item, so ignore that close and only reopen on a deliberate next click.
+        guard Date().timeIntervalSince(lastClose) > 0.2 else { return }
+
         model.popoverWillOpen()
         guard let button = statusItem.button else { return }
         NSApp.activate(ignoringOtherApps: true)
@@ -55,6 +60,7 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
     }
 
     func popoverDidClose(_ notification: Notification) {
+        lastClose = Date()
         model.popoverDidClose()
     }
 
