@@ -22,7 +22,15 @@ if [ -z "$IDENTITY" ] && security find-identity -p codesigning 2>/dev/null | gre
     IDENTITY="Barcode Scanner Dev"
 fi
 IDENTITY="${IDENTITY:--}"
-codesign --force --sign "$IDENTITY" --identifier "com.exweiv.barcodescanner" "$APP"
+
+if ! codesign --force --sign "$IDENTITY" --identifier "com.exweiv.barcodescanner" "$APP"; then
+    if [ "$IDENTITY" = "-" ]; then
+        exit 1
+    fi
+    echo "Signing with '$IDENTITY' failed; falling back to ad-hoc." >&2
+    codesign --force --sign - --identifier "com.exweiv.barcodescanner" "$APP"
+    IDENTITY="-"
+fi
 
 echo "Built: $APP"
 echo "Signed with: $IDENTITY"
